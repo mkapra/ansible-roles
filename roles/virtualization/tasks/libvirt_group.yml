@@ -1,9 +1,0 @@
----
-
-- name: Add users to groups
-  user:
-    name: "{{ item }}"
-    groups: libvirt
-    append: yes
-  with_items: "{{ kvm_users }}"
-  when: kvm_users is defined

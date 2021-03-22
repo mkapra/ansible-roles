@@ -1,7 +1,0 @@
----
-
-- name: Become root for "virtualization" role
-  become: true
-  block:
-    - include: install_kvm.yml
-    - include: libvirt_group.yml

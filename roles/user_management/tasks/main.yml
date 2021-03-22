@@ -1,6 +1,0 @@
----
-
-- name: Become root for "user_management" role
-  become: true
-  block:
-    - include: add_users_and_groups.yml
