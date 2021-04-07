@@ -1,16 +1,13 @@
-iptables
-=========
+# iptables
 
 Configures the firewall with the program `iptables`.
 
-Requirements
-------------
+## Requirements
 
 - bash
 - iptables-persistent
 
-Role Variables
---------------
+## Role Variables
 
 ```yaml
 iptables:
@@ -41,11 +38,10 @@ again.
 interfaces if `flush` is set. Wireguard maybe has to write its own rules into
 iptables again (depends on configuration).
 
-Example Playbook
-----------------
-```yaml
-    - hosts: servers
-      roles:
-         - { role: username.rolename, x: 42 }
+## Example Playbook
 
-``````
+```yaml
+- hosts: servers
+  roles:
+    - { role: username.rolename, x: 42 }
+```
