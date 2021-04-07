@@ -52,6 +52,15 @@ ip6tables -A {{ rule.chain }} \
 systemctl restart docker
 {% endif %}
 
+{% if item.restart_wireguard is defined and item.restart_wireguard %}
+wg_interfaces=$(ifconfig | grep -oh "wg[0-9]")
+for wg_interface in $wg_interfaces
+do
+  wg-quick down $wg_interface
+  wg-quick up $wg_interface
+done
+{% endif %}
+
 {% if item.save_persistent is defined and item.save_persistent %}
 iptables-save > /etc/iptables/rules.v4
 {% if item.ip6 is defined and item.ip6 %}
