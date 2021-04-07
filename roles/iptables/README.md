@@ -1,16 +1,13 @@
-iptables
-=========
+# iptables
 
 Configures the firewall with the program `iptables`.
 
-Requirements
-------------
+## Requirements
 
 - bash
 - iptables-persistent
 
-Role Variables
---------------
+## Role Variables
 
 ```yaml
 iptables:
@@ -22,6 +19,7 @@ iptables:
   ip6: true # Allow traffic with IPv4 and IPv6
   flush: true # Flush tables
   restart_docker: true # Restart docker
+  restart_wireguard: true # Restart wireguard interfaces for NAT rules
   save_persistent: true # Save rules persistent
   rules:
     - chain: INPUT # Chain where to append the rule
@@ -36,11 +34,14 @@ iptables:
 service if `flush` is set. Docker has to write its own rules into iptables
 again.
 
-Example Playbook
-----------------
-```yaml
-    - hosts: servers
-      roles:
-         - { role: username.rolename, x: 42 }
+**Note to `restart_wireguard` option**: It is important to restart the wireguard
+interfaces if `flush` is set. Wireguard maybe has to write its own rules into
+iptables again (depends on configuration).
 
-``````
+## Example Playbook
+
+```yaml
+- hosts: servers
+  roles:
+    - { role: username.rolename, x: 42 }
+```
