@@ -1,0 +1,38 @@
+---
+- name: Install pacman-contrib for rankmirror
+  become: yes
+  pacman:
+    update_cache: yes
+    name: pacman-contrib
+    state: present
+
+- name: Delete old mirrorlist
+  become: yes
+  ansible.builtin.file:
+    path: /etc/pacman.d/mirrorlist
+    state: absent
+
+- name: Backup mirrorlist.pacnew if available
+  become: yes
+  shell: mv /etc/pacman.d/mirrorlist.pacnew /etc/pacman.d/mirrorlist.backup
+  ignore_errors: yes
+
+- name: Download pacman mirror list for Australia, Germany, New Zealand and Singapore
+  become: yes
+  get_url:
+    url: "https://archlinux.org/mirrorlist/?{{ item.country }}&protocol=https&ip_version=4&use_mirror_status=on"
+    dest: "/etc/pacman.d/mirrorlist.download"
+  with_items:
+    - "{{ mirrorlist }}"
+
+- name: "uncomment `#Server` in pacman mirror list"
+  become: yes
+  replace:
+    dest: "/etc/pacman.d/mirrorlist.download"
+    regexp: "^#Server"
+    replace: "Server"
+
+- name: Run rankmirror
+  become: yes
+  shell: rankmirrors -n 0 /etc/pacman.d/mirrorlist.download > /etc/pacman.d/mirrorlist
+  ignore_errors: yes

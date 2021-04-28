@@ -1,0 +1,7 @@
+---
+- name: Install package/s
+  become: yes
+  ansible.builtin.package:
+    update_cache: yes
+    name: "{{ packages }}"
+    state: present

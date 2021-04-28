@@ -1,0 +1,10 @@
+---
+path: /etc/msmtprc
+user: root
+group: root
+logfile: ~/.msmtp.log
+account: msmtp
+smtp_port: 587
+auth: "on"
+tls: "on"
+tls_trust_file: /etc/ssl/certs/ca-certificates.crt

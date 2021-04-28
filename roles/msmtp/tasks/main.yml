@@ -1,0 +1,20 @@
+---
+- name: Install msmtp package
+  become: yes
+  package:
+    update_cache: yes
+    name:
+      - msmtp
+      - msmtp-mta
+    state: present
+
+- name: Copy config file
+  become: yes
+  template:
+    src: templates/msmtprc.j2
+    dest: "{{ item.path | default(path) }}"
+    owner: "{{ item.user | default(user) }}"
+    group: "{{ item.group | default(group) }}"
+    mode: "0400"
+  with_items:
+    - "{{ msmtp }}"

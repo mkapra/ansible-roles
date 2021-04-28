@@ -1,0 +1,3 @@
+---
+AUR_logfile: /etc/ansible/aur.log
+AUR_directory: /var/log/aur-update/

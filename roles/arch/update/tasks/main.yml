@@ -1,0 +1,38 @@
+---
+- name: Create update logs directory
+  become: yes
+  file:
+    dest: "{{ item.AUR_directory | default(AUR_directory) }}"
+    state: directory
+  with_items:
+    - "{{ arch_update }}"
+
+- name: Arch Linux FULL Update via AUR-Helper
+  become: true
+  shell: pikaur -Syu --noconfirm --noedit
+  register: output
+
+- name: Show output
+  debug:
+    msg: "{{ output.stdout.split('\n') }}"
+
+- name: Write results to logfile
+  blockinfile:
+    create: yes
+    path: "{{ item.AUR_logfile | default(AUR_logfile) }}"
+    insertbefore: BOF
+    block: "{{ output.stdout.split('\n') }}"
+    marker: "# {{ inventory_hostname }} {{ ansible_date_time.iso8601_basic_short }} {mark}\n"
+  delegate_to: localhost
+  with_items:
+    - "{{ arch_update }}"
+
+- name: Write update log to file
+  become: yes
+  copy:
+    content: "{{ output.stdout.split('\n') }}"
+    dest: "{{ item.AUR_directory | default(AUR_directory) }}/update-{{ ansible_date_time.iso8601_basic_short }}.log"
+  no_log: False
+  ignore_errors: yes
+  with_items:
+    - "{{ arch_update }}"

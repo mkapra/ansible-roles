@@ -1,0 +1,18 @@
+# Set default values for all following accounts.
+defaults
+auth           {{ item.auth | default(auth) }}
+tls            {{ item.tls | default(tls) }}
+tls_trust_file {{ item.tls_trust_file | default(tls_trust_file) }}
+logfile        {{ item.logfile | default(logfile) }}
+
+# {{ item.account | default(account) }}
+account        {{ item.account | default(account) }}
+host           {{ item.host }}
+port           {{ item.smtp_port | default(smtp_port) }}
+from           {{ item.from_user }}
+user           {{ item.account_user }}
+password       {{ item.account_user_password }}
+
+
+# Set a default account
+account default : {{ item.account | default(account) }}

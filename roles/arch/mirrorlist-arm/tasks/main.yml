@@ -1,0 +1,29 @@
+---
+- name: Install pacman-contrib for rankmirror
+  become: yes
+  pacman:
+    update_cache: yes
+    name: pacman-contrib
+    state: present
+
+- name: Backup mirrorlist
+  become: yes
+  shell: mv /etc/pacman.d/mirrorlist /etc/pacman.d/mirrorlist.old
+  ignore_errors: yes
+
+- name: Backup mirrorlist.pacnew if available
+  become: yes
+  shell: mv /etc/pacman.d/mirrorlist.pacnew /etc/pacman.d/mirrorlist.backup
+  ignore_errors: yes
+
+- name: "uncomment `#Server` in pacman mirror list"
+  become: yes
+  replace:
+    dest: "/etc/pacman.d/mirrorlist.backup"
+    regexp: "^# Server"
+    replace: "Server"
+
+- name: Run rankmirror
+  become: yes
+  shell: rankmirrors -n 0 /etc/pacman.d/mirrorlist.backup > /etc/pacman.d/mirrorlist
+  ignore_errors: yes

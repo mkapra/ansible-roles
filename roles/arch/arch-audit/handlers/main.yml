@@ -1,0 +1,13 @@
+---
+- name: Enable service and ensure it is not masked
+  become: yes
+  systemd:
+    name: cronie.service
+    enabled: yes
+    masked: no
+
+- name: Make sure the service is running
+  become: yes
+  systemd:
+    state: started
+    name: cronie.service

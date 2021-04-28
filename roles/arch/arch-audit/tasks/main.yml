@@ -1,0 +1,45 @@
+---
+- name: Install arch-audit
+  become: yes
+  pacman:
+    update_cache: yes
+    name: arch-audit
+    state: present
+
+- name: Create script folder
+  become: yes
+  file:
+    dest: /root/scripts/
+    state: directory
+    owner: root
+    group: root
+    mode: "0600"
+
+- name: Copy script (with or without email notification)
+  become: yes
+  template:
+    src: templates/arch_audit_email.j2
+    dest: /root/scripts/arch-audit.sh
+    owner: root
+    group: root
+    mode: "0700"
+  with_items:
+    - "{{ arch_audit }}"
+
+- name: Check availability of cronie (crontab) and install it if necessary
+  become: yes
+  pacman:
+    update_cache: yes
+    name: cronie
+    state: present
+  notify:
+    - Enable service and ensure it is not masked
+    - Make sure the service is running
+
+- name: Run script every day
+  become: yes
+  cron:
+    name: "arch-audit"
+    minute: "0"
+    hour: "6"
+    job: "/root/scripts/arch-audit.sh"

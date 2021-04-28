@@ -1,0 +1,22 @@
+---
+- name: Check all pacman logs for pacnew files etc.
+  become: yes
+  shell: cat /var/log/pacman.log | grep "$(date +"%Y-%m-%d")" | grep "warning:"
+  register: cat
+  ignore_errors: yes
+  no_log: false
+
+- name: Show output
+  debug:
+    msg: "{{ cat.stdout.split('\n') }}"
+
+- name: Write results to logfile
+  blockinfile:
+    create: yes
+    path: "{{ item.path | default(path) }}"
+    insertbefore: BOF
+    block: "{{ cat.stdout.split('\n') }}"
+    marker: "# {{ inventory_hostname }} {{ ansible_date_time.iso8601_basic_short }} {mark}\n"
+  delegate_to: localhost
+  with_items:
+    - "{{ pacman_logs }}"

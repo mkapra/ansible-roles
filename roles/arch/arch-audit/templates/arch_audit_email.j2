@@ -1,0 +1,13 @@
+#!/bin/bash
+arch-audit --upgradable --show-testing >/tmp/arch-audit.log
+echo "$(cat /tmp/arch-audit.log)" >/etc/motd
+{% if item.send_email is defined and item.send_email == true %}
+
+if [ -s /tmp/arch-audit.log ]; then
+  sed -i '1i To: {{ item.email }}' /tmp/arch-audit.log
+  sed -i '2i Subject: arch-audit' /tmp/arch-audit.log
+  cat /tmp/arch-audit.log | msmtp -a default {{ item.email }}
+fi
+
+{% endif %}
+rm /tmp/arch-audit.log

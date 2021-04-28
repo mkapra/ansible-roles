@@ -1,13 +1,12 @@
-wireguard
-=========
+# wireguard
 
-Configures wireguard interfaces and the configs for its clients.
-The configuration files will be located in:
-  - server: `/etc/wireguard/wg<0-X>.conf`
-  - clients: `/etc/wireguard/clients/wg<0-X>/<clientname>.conf`
+Configures wireguard interfaces and the configs for its clients. The
+configuration files will be located in:
 
-Role Variables
---------------
+- server: `/etc/wireguard/wg<0-X>.conf`
+- clients: `/etc/wireguard/clients/wg<0-X>/<clientname>.conf`
+
+## Role Variables
 
 ```yaml
 vpns:
@@ -28,10 +27,10 @@ clients:
     vpn: wg0 # Association to an interface/VPN group
 ```
 
-Example Playbook
-----------------
+## Example Playbook
+
 ```yaml
 - hosts: servers
   roles:
-     - ansible-roles/wireguard
+    - ansible-roles/roles/wireguard
 ```

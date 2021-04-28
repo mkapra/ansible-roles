@@ -1,11 +1,8 @@
-nginx
-=========
+# nginx
 
 Configures a nginx webserver as reverse proxy.
 
-
-Role Variables
---------------
+## Role Variables
 
 ```yaml
 # Default server configuration: Every not matching domain will be redirected to this path
@@ -16,7 +13,7 @@ nginx_default_server:
     nginx_ssl_certificate_path: # Path on the host: Have to be already on the server
     nginx_ssl_certificate_key_path: # Path on the host: Have to be already on the server
     nginx_proxy_pass:
- 
+
 # Simple reverse proxy
 nginx_servers:
   - nginx_server_names:
@@ -38,10 +35,10 @@ nginx_servers_with_websockets:
     nginx_conf_name:
 ```
 
-Example Playbook
-----------------
+## Example Playbook
+
 ```yaml
 - hosts: servers
   roles:
-     - ansible-roles/nginx
+    - ansible-roles/roles/nginx
 ```
